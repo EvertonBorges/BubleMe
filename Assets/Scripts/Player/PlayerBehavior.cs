@@ -39,12 +39,12 @@ public class PlayerBehavior : MonoBehaviour {
         bool isToJump = Input.GetKey(KeyCode.Space);
 
         if (horinzontalAxis != 0f) {
-            rigidbody2D.AddForce(Vector2.right * realSpeed * horinzontalAxis);
+            rigidbody2D.AddForce(Vector2.right * (realSpeed*2) * horinzontalAxis);
         }
 
-        if (isToJump && isGround) {
-            rigidbody2D.AddForce(Vector2.up * jumpForce);
-            isGround = false;
+        if (isToJump && !isJumping) {
+            rigidbody2D.AddForce(Vector2.up * (jumpForce*2));
+            isJumping = true;
             Debug.Log("Pulou");
         }
         
