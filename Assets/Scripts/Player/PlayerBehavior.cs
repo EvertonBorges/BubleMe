@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour {
 
     private new Rigidbody2D rigidbody2D;
+    private PlayerController playerController;
 
     [SerializeField]
     private float speedForce;
@@ -14,20 +15,25 @@ public class PlayerBehavior : MonoBehaviour {
     private float jumpForce;
     [SerializeField]
     private LayerMask groundLayer;
+    [SerializeField]
+    private float timeToRecover;
+    private float actualTimeToRecover;
 
     private bool isJumping;
     private bool isGround;
+    private bool isHitable;
+
+    private void Awake() {
+        rigidbody2D = GetComponent<Rigidbody2D> ();
+        playerController = GetComponent<PlayerController> ();
+
+        isJumping = false;
+        isGround = true;
+    }
 
     // Start is called before the first frame update
     void Start() {
         realSpeed = speedForce;
-    }
-
-    private void Awake() {
-        rigidbody2D = GetComponent<Rigidbody2D>();
-
-        isJumping = false;
-        isGround = true;
     }
 
     // Update is called once per frame
@@ -43,6 +49,13 @@ public class PlayerBehavior : MonoBehaviour {
             rigidbody2D.AddForce(Vector2.up * jumpForce);
             isJumping = true;
             Debug.Log("Pulou");
+        }
+
+        if (actualTimeToRecover > 0f && !isHitable) {
+            actualTimeToRecover -= Time.deltaTime;
+            if (actualTimeToRecover < 0f) {
+                isHitable = true;
+            }
         }
         
     }
@@ -68,4 +81,15 @@ public class PlayerBehavior : MonoBehaviour {
             }
         }
     }
+
+    public void SpikeHit() {
+        playerController.removeLife();
+        startTimeToRecover();
+    }
+
+    private void startTimeToRecover() {
+        isHitable = true;
+        actualTimeToRecover = timeToRecover;
+    }
+
 }
