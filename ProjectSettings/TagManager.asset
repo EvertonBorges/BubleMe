@@ -8,6 +8,8 @@ TagManager:
   - Life
   - Enemy
   - SpikeEnemy
+  - Wall
+  - Coin
   layers:
   - Default
   - TransparentFX

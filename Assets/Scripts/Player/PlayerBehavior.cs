@@ -15,13 +15,10 @@ public class PlayerBehavior : MonoBehaviour {
     private float jumpForce;
     [SerializeField]
     private LayerMask groundLayer;
-    [SerializeField]
-    private float timeToRecover;
-    private float actualTimeToRecover;
 
     private bool isJumping;
     private bool isGround;
-    private bool isHitable;
+    
 
     private void Awake() {
         rigidbody2D = GetComponent<Rigidbody2D> ();
@@ -39,57 +36,42 @@ public class PlayerBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         float horinzontalAxis = Input.GetAxis("Horizontal");
-        float jumpAxis = Input.GetAxis("Jump");
+        bool isToJump = Input.GetKey(KeyCode.Space);
 
         if (horinzontalAxis != 0f) {
             rigidbody2D.AddForce(Vector2.right * realSpeed * horinzontalAxis);
         }
 
-        if (jumpAxis > 0f && !isJumping) {
+        if (isToJump && isGround) {
             rigidbody2D.AddForce(Vector2.up * jumpForce);
-            isJumping = true;
+            isGround = false;
             Debug.Log("Pulou");
-        }
-
-        if (actualTimeToRecover > 0f && !isHitable) {
-            actualTimeToRecover -= Time.deltaTime;
-            if (actualTimeToRecover < 0f) {
-                isHitable = true;
-            }
         }
         
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (!isGround) {
-            if (collision.collider.CompareTag("Ground")) {
-                realSpeed = speedForce;
-                isJumping = false;
-                isGround = true;
-                Debug.Log("Está no chão");
-            }
+        if (collision.collider.CompareTag("Ground")) {
+            realSpeed = speedForce;
+            isGround = true;
+            Debug.Log("Está no chão");
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
-        if (isGround) {
-            if (collision.collider.CompareTag("Ground")) {
-                realSpeed = speedForce / 2;
-                isJumping = true;
-                isGround = false;
-                Debug.Log("Fora do chão");
-            }
+        if (collision.collider.CompareTag("Ground")) {
+            realSpeed = speedForce / 2;
+            isGround = false;
+            Debug.Log("Fora do chão");
         }
     }
 
-    public void SpikeHit() {
-        playerController.removeLife();
-        startTimeToRecover();
-    }
-
-    private void startTimeToRecover() {
-        isHitable = true;
-        actualTimeToRecover = timeToRecover;
+    private void OnCollisionStay2D(Collision2D collision) {
+        if (collision.collider.CompareTag("Ground")) {
+            realSpeed = speedForce;
+            isGround = true;
+            Debug.Log("Está no chão");
+        }
     }
 
 }

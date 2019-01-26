@@ -8,6 +8,9 @@ public class GameController : MonoBehaviour {
     [SerializeField]
     private Image[] lifes;
 
+    [SerializeField]
+    private Image[] coins;
+
     // Start is called before the first frame update
     void Start() {
         
@@ -19,7 +22,8 @@ public class GameController : MonoBehaviour {
     }
 
     public void gameOver() {
-
+        Debug.Log("Game Over");
+        Application.Quit();
     }
 
     public void qtdeVidas(int lifes) {
@@ -30,6 +34,24 @@ public class GameController : MonoBehaviour {
                 this.lifes[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    public void qtdeCoins(int coins) {
+        for (int i = 0; i < this.coins.Length; i++) {
+            if (i < coins) {
+                this.coins[i].gameObject.SetActive(true);
+            } else {
+                this.coins[i].gameObject.SetActive(false);
+            }
+        }
+
+        if (coins == this.coins.Length) {
+            Win();
+        }
+    }
+
+    private void Win() {
+        Debug.Log("Ganhou");
     }
 
 }
