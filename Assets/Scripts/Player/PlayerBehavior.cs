@@ -42,7 +42,7 @@ public class PlayerBehavior : MonoBehaviour {
         float jumpAxis = Input.GetAxis("Jump");
 
         if (horinzontalAxis != 0f) {
-            rigidbody2D.AddForce(Vector2.right * (realSpeed*3) * horinzontalAxis);
+            rigidbody2D.AddForce(Vector2.right * (realSpeed*2) * horinzontalAxis);
         }
 
         if (jumpAxis > 0f && !isJumping) {
