@@ -48,6 +48,7 @@ public class PlayerBehavior : MonoBehaviour {
             Debug.Log("Pulou");
         }
         
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
