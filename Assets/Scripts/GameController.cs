@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    [SerializeField]
-    private Image[] lifes;
+    //[SerializeField]
+    //private Image[] lifes;
 
     [SerializeField]
     private Image[] coins;
@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour {
         Application.Quit();
     }
 
+    /*
     public void qtdeVidas(int lifes) {
         for (int i = 0; i < this.lifes.Length; i++) {
             if (i < lifes) {
@@ -43,6 +44,7 @@ public class GameController : MonoBehaviour {
             }
         }
     }
+    */
 
     public void qtdeCoins(int coins) {
         for (int i = 0; i < this.coins.Length; i++) {

@@ -17,17 +17,32 @@ public class PlayerBehavior : MonoBehaviour {
     private float jumpForce;
     [SerializeField]
     private LayerMask groundLayer;
+    [SerializeField]
+    private CameraBehavior cameraBehavior;
+    [SerializeField]
+    private float xForceDeath;
+    [SerializeField]
+    private float yForceDeath;
 
     private bool isWalking;
     private bool isGround;
     private bool isFacingLeft;
     private bool isInBubble;
+    private bool isAlive;
     private Animator animator;
 
     [SerializeField]
     private CircleCollider2D colliderInBuble;
     [SerializeField]
     private CircleCollider2D[] colliderOffBubles;
+
+    [SerializeField]
+    private Transform[] secondFloor;
+    [SerializeField]
+    private Transform[] thirdFloor;
+
+    [SerializeField]
+    private AudioSource jumpSound;
 
     private void Awake() {
         rigidbody2D = GetComponent<Rigidbody2D> ();
@@ -37,6 +52,7 @@ public class PlayerBehavior : MonoBehaviour {
         isGround = true;
         isFacingLeft = false;
         isInBubble = true;
+        isAlive = true;
     }
 
     // Start is called before the first frame update
@@ -46,6 +62,8 @@ public class PlayerBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (!isAlive) return;
+
         if (!animator.IsInTransition(0)) {
             UpdateAnimation();
             tryMoviment(Input.GetAxis("Horizontal"));
@@ -53,6 +71,18 @@ public class PlayerBehavior : MonoBehaviour {
 
             if (rigidbody2D.velocity.x > maxSpeed) {
                 rigidbody2D.velocity = new Vector2(maxSpeed, rigidbody2D.velocity.y);
+            }
+        }
+
+        if (transform.position.y > secondFloor[0].position.y) {
+            cameraBehavior.secondFloor();
+            foreach (Transform floor in secondFloor) {
+                floor.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            }
+        } else {
+            cameraBehavior.firstFloor();
+            foreach (Transform floor in secondFloor) {
+                floor.GetComponent<SpriteRenderer>().sortingOrder = 5;
             }
         }
     }
@@ -83,7 +113,9 @@ public class PlayerBehavior : MonoBehaviour {
 
     public void tryJump(int isToJump) {
         if ((isToJump > 0) && isGround) {
-            rigidbody2D.AddForce(Vector2.up * (((isInBubble) ? jumpForce : jumpForce / 2) * isToJump));
+            jumpSound.Play();
+
+            rigidbody2D.AddForce(Vector2.up * (((isInBubble) ? jumpForce : jumpForce + 2) * isToJump));
             isGround = false;
             Debug.Log("Pulou");
         }
@@ -140,5 +172,13 @@ public class PlayerBehavior : MonoBehaviour {
 
 		transform.localScale = localScale;
 	}
+
+    public void Morreu() {
+        Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
+        rigidbody2D.velocity = Vector2.zero;
+        rigidbody2D.AddForce(new Vector2(-xForceDeath, yForceDeath));
+
+        isAlive = false;
+    }
 
 }

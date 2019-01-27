@@ -7,21 +7,33 @@ public class CameraBehavior : MonoBehaviour {
     [SerializeField]
     private Transform target;
 
+    [SerializeField]
+    private float camVelocity;
+
     private float startSize;
     private float offsetX;
     private float minX;
     private float maxX;
     private float startY;
+    private float lastY;
 
     private Vector3 largeScale;
     private float largeSize;
 
+    private float firstFloorY;
+    private float secondFloorY;
+    private float thirdFloorY;
+
     void Awake() {
         startSize = Camera.main.orthographicSize;
         offsetX = transform.position.x - target.position.x;
-        minX = 01.7f;
-        maxX = 87.4f;
+        minX = 06.95f;
+        maxX = 82.90f;
         startY = transform.position.y;
+        lastY = startY;
+
+        firstFloorY = 06.35f;
+        secondFloorY = 16.35f;
 
         largeScale = new Vector3(43f, 21.4f, -10f);
     }
@@ -33,7 +45,13 @@ public class CameraBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        transform.position = new Vector3(PosicaoCameraX(), startY, -10f);
+        if (startY > lastY) {
+            transform.position = new Vector3(PosicaoCameraX(), (transform.position.y < startY) ? (transform.position.y + camVelocity * Time.deltaTime) : startY, -10f);
+        } else if (startY < lastY) {
+            transform.position = new Vector3(PosicaoCameraX(), (transform.position.y > startY) ? (transform.position.y - camVelocity * Time.deltaTime) : startY, -10f);
+        } else {
+            transform.position = new Vector3(PosicaoCameraX(), startY, -10f);
+        }
     }
 
     private float PosicaoCameraX() {
@@ -46,6 +64,16 @@ public class CameraBehavior : MonoBehaviour {
         } else {
             return suggestedX;
         }
+    }
+
+    public void firstFloor() {
+        lastY = startY;
+        startY = firstFloorY;
+    }
+
+    public void secondFloor() {
+        lastY = startY;
+        startY = secondFloorY;
     }
 
 }

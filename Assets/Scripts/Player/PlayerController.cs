@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour {
     private bool isHitable;
     private bool isHitade;
 
+    [SerializeField]
+    private AudioSource deadSound;
+    [SerializeField]
+    private AudioSource collectedSound;
+
     void Awake() {
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController> ();
         playerBehavior = GetComponent<PlayerBehavior> ();
@@ -56,7 +61,7 @@ public class PlayerController : MonoBehaviour {
 
     public void addLife(int lifeToAdd) {
         life += lifeToAdd;
-        gameController.qtdeVidas(life);
+        //gameController.qtdeVidas(life);
     }
 
     public void addCoin() {
@@ -81,8 +86,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (collision.CompareTag("Coin")) {
-            GameObject.Destroy(collision.gameObject);
-            addCoin();
+            collectedSound.Play();
+            collision.GetComponentInParent<ItemController>().collected(this);
+
+            //addCoin();
         }
 
         if (collision.CompareTag("SpikeEnemy")) {
@@ -93,7 +100,7 @@ public class PlayerController : MonoBehaviour {
                 isHitade = true;
 
                 if (life <= 0) {
-                    gameController.gameOver();
+                    death();
                 }
             }
         }
@@ -117,8 +124,14 @@ public class PlayerController : MonoBehaviour {
 
     private void checkDeath() {
         if (transform.position.y < -5f) {
-            gameController.gameOver();
+            death();
         }
+    }
+
+    private void death() {
+        playerBehavior.Morreu();
+        deadSound.Play();
+        gameController.gameOver();
     }
 
 }
