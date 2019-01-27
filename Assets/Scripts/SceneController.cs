@@ -14,7 +14,16 @@ public class SceneController : MonoBehaviour {
 
     }
 
-    public void Jogar() {
+    public static void Jogar() {
         SceneManager.LoadScene("SampleScene");
     }
+
+    public static void Menu() {
+        SceneManager.LoadScene("MenuPrincipal");
+    }
+
+    public static void Sair() {
+        Application.Quit();
+    }
+
 }

@@ -24,6 +24,8 @@ public class CameraBehavior : MonoBehaviour {
     private float secondFloorY;
     private float thirdFloorY;
 
+    private bool playerIsAlive;
+
     void Awake() {
         startSize = Camera.main.orthographicSize;
         offsetX = transform.position.x - target.position.x;
@@ -36,6 +38,8 @@ public class CameraBehavior : MonoBehaviour {
         secondFloorY = 16.35f;
 
         largeScale = new Vector3(43f, 21.4f, -10f);
+
+        playerIsAlive = true;
     }
 
     // Start is called before the first frame update
@@ -45,6 +49,8 @@ public class CameraBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (!playerIsAlive) return;
+
         if (startY > lastY) {
             transform.position = new Vector3(PosicaoCameraX(), (transform.position.y < startY) ? (transform.position.y + camVelocity * Time.deltaTime) : startY, -10f);
         } else if (startY < lastY) {
@@ -74,6 +80,10 @@ public class CameraBehavior : MonoBehaviour {
     public void secondFloor() {
         lastY = startY;
         startY = secondFloorY;
+    }
+
+    public void Morreu() {
+        playerIsAlive = false;
     }
 
 }

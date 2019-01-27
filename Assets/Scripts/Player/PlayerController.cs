@@ -22,12 +22,15 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private AudioSource collectedSound;
 
+    private bool isDead;
+
     void Awake() {
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController> ();
         playerBehavior = GetComponent<PlayerBehavior> ();
         isHitade = false;
         isHitable = true;
         coins = -1;
+        isDead = false;
     }
 
     // Start is called before the first frame update
@@ -92,6 +95,10 @@ public class PlayerController : MonoBehaviour {
             //addCoin();
         }
 
+        if (collision.CompareTag("CairLivros")) {
+            gameController.CairLivros();
+        }
+
         if (collision.CompareTag("SpikeEnemy")) {
             if (isHitable) {
                 Debug.Log("Começou contato com spike");
@@ -128,10 +135,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void death() {
-        playerBehavior.Morreu();
-        deadSound.Play();
-        gameController.gameOver();
+    public void death() {
+        if (!isDead) {
+            isDead = true;
+            playerBehavior.Morreu();
+            deadSound.Play();
+            gameController.gameOver();
+        }
     }
 
 }

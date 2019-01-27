@@ -125,7 +125,7 @@ public class PlayerBehavior : MonoBehaviour {
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isInBubble", isInBubble);
 
-        rigidbody2D.freezeRotation = !isInBubble;
+        //rigidbody2D.freezeRotation = !isInBubble;
         colliderInBuble.enabled = isInBubble;
         foreach (CircleCollider2D colliderOffBuble in colliderOffBubles) {
             colliderOffBuble.enabled = !isInBubble;
@@ -174,9 +174,15 @@ public class PlayerBehavior : MonoBehaviour {
 	}
 
     public void Morreu() {
-        Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
+        animator.SetTrigger("Death");
+
         rigidbody2D.velocity = Vector2.zero;
         rigidbody2D.AddForce(new Vector2(-xForceDeath, yForceDeath));
+
+        colliderInBuble.enabled = false;
+        foreach (CircleCollider2D colliderOffBuble in colliderOffBubles) {
+            colliderOffBuble.enabled = true;
+        }
 
         isAlive = false;
     }
