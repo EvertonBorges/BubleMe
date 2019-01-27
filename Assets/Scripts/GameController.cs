@@ -11,6 +11,13 @@ public class GameController : MonoBehaviour {
     [SerializeField]
     private Image[] coins;
 
+    [SerializeField]
+    private Text gameOverText;
+
+    private void Awake() {
+        gameOverText.gameObject.SetActive(false);
+    }
+
     // Start is called before the first frame update
     void Start() {
         
@@ -23,6 +30,7 @@ public class GameController : MonoBehaviour {
 
     public void gameOver() {
         Debug.Log("Game Over");
+        gameOverText.gameObject.SetActive(true);
         Application.Quit();
     }
 

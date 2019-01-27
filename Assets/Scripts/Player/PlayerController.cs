@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D), typeof(PlayerBehavior))]
+[RequireComponent(typeof(PlayerBehavior))]
 public class PlayerController : MonoBehaviour {
 
     private int life;
@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour {
                 isHitable = true;
             }
         }
+
+        checkDeath();
     }
 
     public void addLife() {
@@ -87,6 +89,7 @@ public class PlayerController : MonoBehaviour {
             if (isHitable) {
                 Debug.Log("Começou contato com spike");
                 removeLife();
+                isHitable = false;
                 isHitade = true;
 
                 if (life <= 0) {
@@ -110,6 +113,12 @@ public class PlayerController : MonoBehaviour {
         Debug.Log("Começou a se recuperar");
         isHitable = false;
         actualTimeToRecover = timeToRecover;
+    }
+
+    private void checkDeath() {
+        if (transform.position.y < -5f) {
+            gameController.gameOver();
+        }
     }
 
 }

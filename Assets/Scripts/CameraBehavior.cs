@@ -8,10 +8,12 @@ public class CameraBehavior : MonoBehaviour {
     private Transform target;
 
     private float offsetX;
+    private float startX;
     private float startY;
 
     void Awake() {
         offsetX = transform.position.x - target.position.x;
+        startX = transform.position.x;
         startY = transform.position.y;
     }
 
@@ -22,6 +24,6 @@ public class CameraBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        transform.position = new Vector3(offsetX + target.position.x, startY, -10f);
+        transform.position = new Vector3(((offsetX + target.position.x) < startX) ? startX : (offsetX + target.position.x), startY, -10f);
     }
 }
