@@ -16,7 +16,7 @@ public class BooksController : MonoBehaviour
             _booksTop.gameObject.SetActive(false);
             _booksBottom.gameObject.SetActive(true);
 
-            // _sfxBooksFallDown.Play();
+            EventSystem.Sfx_BooksFall.Notify();
             _booksFell = true;
         }
     }

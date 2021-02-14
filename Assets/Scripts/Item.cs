@@ -43,6 +43,7 @@ public class Item : MonoBehaviour
         if (!_caught && other.CompareTag(Tags.Player.ToString()))
         {
             EventSystem.GameController_AddItem.Notify(_sprite);
+            EventSystem.Sfx_ItemPick.Notify();
             _animator.SetTrigger("Collected");
             _caught = true;
             Destroy(transform.parent.gameObject, 0.4f);

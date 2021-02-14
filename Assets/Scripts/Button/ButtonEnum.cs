@@ -9,11 +9,7 @@ public enum TypeButton {
 [RequireComponent(typeof(Animator))]
 public class ButtonEnum : MonoBehaviour {
 
-    [SerializeField]
-    private TypeButton buttonType;
-
-    [SerializeField]
-    private AudioSource bubbleSound;
+    [SerializeField] private TypeButton buttonType;
 
     private Animator animator;
 
@@ -23,9 +19,7 @@ public class ButtonEnum : MonoBehaviour {
     }
 
     public void Acao(){
-        if (bubbleSound != null) {
-            bubbleSound.Play();
-        }
+        EventSystem.Sfx_PopBuble.Notify();
         animator.SetTrigger("Pressed");
     }
 

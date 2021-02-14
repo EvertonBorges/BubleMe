@@ -71,6 +71,10 @@ public class EventSystem
     public static Event Scene_MainMenu;
     public static Event Scene_Quit;
 
+    public static Event Sfx_PopBuble;
+    public static Event Sfx_BooksFall;
+    public static Event Sfx_ItemPick;
+
     public static Event Player_Death;
 
 

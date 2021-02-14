@@ -11,7 +11,7 @@ public class SoundController : Singleton<SoundController>
     [SerializeField] private AudioClip _soundMenu = null;
     [SerializeField] private AudioClip _soundGameplay = null;
 
-    [SerializeField] private float _transitionTime = 1f;
+    [Range(0.5f, 5f)] [SerializeField] private float _transitionTime = 1f;
 
     protected override void Init()
     {
