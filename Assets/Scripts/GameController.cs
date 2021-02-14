@@ -15,7 +15,7 @@ public class GameController : Singleton<GameController>
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
-    void Start()
+    protected override void Init()
     {
         foreach(var item in _itemsImage)
             item.gameObject.SetActive(false);
@@ -47,16 +47,30 @@ public class GameController : Singleton<GameController>
         }
     }
 
+    private void Pause()
+    {
+        _isPaused = true;
+    }
+
+    private void Unpause()
+    {
+        _isPaused = false;
+    }
+
     private void OnEnable()
     {
         EventSystem.Player_Death.Add(GameOver);
         EventSystem.GameController_AddItem.Add(GetItem);
+        EventSystem.GameController_Pause.Add(Pause);
+        EventSystem.GameController_Unpause.Add(Unpause);
     }
 
     private void OnDisable()
     {
         EventSystem.Player_Death.Remove(GameOver);
         EventSystem.GameController_AddItem.Remove(GetItem);
+        EventSystem.GameController_Pause.Remove(Pause);
+        EventSystem.GameController_Unpause.Remove(Unpause);
     }
 
 }

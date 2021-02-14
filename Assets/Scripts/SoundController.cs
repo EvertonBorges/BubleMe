@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class SoundController : MonoBehaviour
+public class SoundController : Singleton<SoundController>
 {
 
     private AudioSource _audioSource = null;
@@ -11,26 +11,65 @@ public class SoundController : MonoBehaviour
     [SerializeField] private AudioClip _soundMenu = null;
     [SerializeField] private AudioClip _soundGameplay = null;
 
-    void Awake()
+    [SerializeField] private float _transitionTime = 1f;
+
+    protected override void Init()
     {
         _audioSource = GetComponent<AudioSource>();
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void PlayMenuMusic()
+    private void PlayMenuMusic()
     {
-       Play(_soundMenu);
+       StartCoroutine(ChangeMusic(_soundMenu));
     }
 
-    public void PlayGameplayMusic()
+    private void PlayGameplayMusic()
     {
-       Play(_soundGameplay);
+       StartCoroutine(ChangeMusic(_soundGameplay));
     }
 
-    private void Play(AudioClip clip)
+    IEnumerator ChangeMusic(AudioClip clip)
     {
+        float currentTime = 0f;
+        while (currentTime < _transitionTime / 2f)
+        {
+            currentTime += Time.deltaTime;
+            _audioSource.volume = Mathf.Lerp(1f, 0f, currentTime / (_transitionTime / 2f));
+
+            yield return null;
+        }
+
+        _audioSource.volume = 0f;
         _audioSource.Stop();
         _audioSource.clip = clip;
+        yield return null;
+        
         _audioSource.Play();
+        yield return null;
+        
+        currentTime = 0f;
+        while (currentTime < _transitionTime / 2f)
+        {
+            currentTime += Time.deltaTime;
+            _audioSource.volume = Mathf.Lerp(0f, 1f, currentTime / (_transitionTime / 2f));
+
+            yield return null;
+        }
+
+        _audioSource.volume = 1f;
+    }
+
+    void OnEnable()
+    {
+        EventSystem.GameController_GameStart.Add(PlayGameplayMusic);
+        EventSystem.GameController_MainMenu.Add(PlayMenuMusic);
+    }
+
+    void OnDisable()
+    {
+        EventSystem.GameController_GameStart.Remove(PlayGameplayMusic);
+        EventSystem.GameController_MainMenu.Remove(PlayMenuMusic);
     }
 
 }

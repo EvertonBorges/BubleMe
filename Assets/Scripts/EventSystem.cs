@@ -64,6 +64,13 @@ public class EventSystem
     public static Event GameController_Pause;
     public static Event GameController_Unpause;
 
+    public static Event GameController_GameStart;
+    public static Event GameController_MainMenu;
+
+    public static Event Scene_Gameplay;
+    public static Event Scene_MainMenu;
+    public static Event Scene_Quit;
+
     public static Event Player_Death;
 
 

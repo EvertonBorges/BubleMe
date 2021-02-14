@@ -50,7 +50,7 @@ public class PlayerBehavior : MonoBehaviour {
 
     void Update()
     {
-        if (!_isAlive) return;
+        if (!_isAlive || GameController.Instance.IsPaused) return;
 
         OnGround();
         UpdateAnimation();

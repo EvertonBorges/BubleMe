@@ -40,7 +40,7 @@ public class ButtonEnum : MonoBehaviour {
     }
 
     private void Jogar() {
-        SceneController.Jogar();
+        EventSystem.Scene_Gameplay.Notify();
     }
 
     private void Pausar() {
@@ -48,15 +48,15 @@ public class ButtonEnum : MonoBehaviour {
     }
 
     private void Voltar() {
-        SceneController.Menu();
+        EventSystem.Scene_MainMenu.Notify();
     }
 
     private void Restart() {
-        SceneController.Jogar();
+        EventSystem.Scene_Gameplay.Notify();
     }
 
     private void Sair() {
-        SceneController.Sair();
+        EventSystem.Scene_Quit.Notify();
     }
 
 }
