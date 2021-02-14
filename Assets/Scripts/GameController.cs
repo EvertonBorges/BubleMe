@@ -3,111 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
+public class GameController : Singleton<GameController>
+{
 
-    //[SerializeField]
-    //private Image[] lifes;
+    [Header("UI Reference")]
+    [SerializeField] private Image _panelGameover;
 
-    [SerializeField]
-    private Image[] coins;
+    [Header("Item")]
+    [SerializeField] private Image[] _itemsImage;
 
-    [SerializeField]
-    private ItemController[] itens;
+    private bool _isPaused = false;
+    public bool IsPaused => _isPaused;
 
-    [SerializeField]
-    private Image panelGameOver;
+    void Start()
+    {
+        foreach(var item in _itemsImage)
+            item.gameObject.SetActive(false);
 
-    [SerializeField]
-    private CameraBehavior cameraBehavior;
-
-    [SerializeField]
-    private SoundController soundController;
-
-    [SerializeField]
-    private AudioSource somLivrosCaindo;
-
-    [SerializeField]
-    private Transform livrosCima;
-
-    [SerializeField]
-    private Transform livrosBaixo;
-
-    private int qtdeItens;
-
-    private bool livrosCairam;
-
-    private void Awake() {
-        panelGameOver.gameObject.SetActive(false);
-        livrosCairam = false;
+        _panelGameover.gameObject.SetActive(false);
     }
 
-    // Start is called before the first frame update
-    void Start() {
-
+    public void GameOver()
+    {
+        _panelGameover.gameObject.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    public void gameOver() {
-        Debug.Log("Game Over");
-        soundController.Morreu();
-        foreach (ItemController item in itens) {
-            if (item != null) {
-                item.Morreu();
-            }
-        }
-        cameraBehavior.Morreu();
-        panelGameOver.gameObject.SetActive(true);
-        //Application.Quit();
-    }
-
-    /*
-    public void qtdeVidas(int lifes) {
-        for (int i = 0; i < this.lifes.Length; i++) {
-            if (i < lifes) {
-                this.lifes[i].gameObject.SetActive(true);
-            } else {
-                this.lifes[i].gameObject.SetActive(false);
-            }
-        }
-    }
-    */
-
-    public void qtdeCoins(int coins) {
-        qtdeItens = coins;
-
-        for (int i = 0; i < this.coins.Length; i++) {
-            if (i < coins) {
-                this.coins[i].gameObject.SetActive(true);
-            } else {
-                this.coins[i].gameObject.SetActive(false);
-            }
-        }
-
-        if (coins == 5) {
-            Win();
-        }
-    }
-
-    private void Win() {
+    private void Win()
+    {
         Debug.Log("Ganhou");
     }
 
-    public Image getImagem() {
-        return (qtdeItens > 0) ? coins[qtdeItens - 1] : coins[0];
+    private void GetItem(Sprite sprite)
+    {
+        for (int i = 0; i < _itemsImage.Length; i++)
+        {
+            var item = _itemsImage[i];
+            if (!item.gameObject.activeSelf)
+            {
+                item.gameObject.SetActive(true);
+                item.sprite = sprite;
+                break;
+            }
+        }
     }
 
-    public void CairLivros(){
-        if (!livrosCairam) {
-            livrosCima.gameObject.SetActive(false);
-            livrosBaixo.gameObject.SetActive(true);
+    private void OnEnable()
+    {
+        EventSystem.Player_Death.Add(GameOver);
+        EventSystem.GameController_AddItem.Add(GetItem);
+    }
 
-            somLivrosCaindo.Play();
-            livrosCairam = true;
-        }
+    private void OnDisable()
+    {
+        EventSystem.Player_Death.Remove(GameOver);
+        EventSystem.GameController_AddItem.Remove(GetItem);
     }
 
 }

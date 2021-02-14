@@ -23,7 +23,7 @@ public class ButtonMoviment : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
             axis /= 5;
             axis = (axis > 1) ? 1 : axis;
 
-            player.tryMoviment((point2.x < point1.x) ? -axis : axis);
+            player.TryMoviment((point2.x < point1.x) ? -axis : axis);
         }
     }
 

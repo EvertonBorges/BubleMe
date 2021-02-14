@@ -26,7 +26,8 @@ public class CameraBehavior : MonoBehaviour {
 
     private bool playerIsAlive;
 
-    void Awake() {
+    void Awake()
+    {
         startSize = Camera.main.orthographicSize;
         offsetX = transform.position.x - target.position.x;
         minX = 06.95f;
@@ -42,13 +43,8 @@ public class CameraBehavior : MonoBehaviour {
         playerIsAlive = true;
     }
 
-    // Start is called before the first frame update
-    void Start() {
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         if (!playerIsAlive) return;
 
         if (startY > lastY) {
@@ -60,7 +56,8 @@ public class CameraBehavior : MonoBehaviour {
         }
     }
 
-    private float PosicaoCameraX() {
+    private float PosicaoCameraX()
+    {
         float suggestedX = offsetX + target.position.x;
 
         if (suggestedX < minX) {
@@ -72,18 +69,31 @@ public class CameraBehavior : MonoBehaviour {
         }
     }
 
-    public void firstFloor() {
+    public void firstFloor()
+    {
         lastY = startY;
         startY = firstFloorY;
     }
 
-    public void secondFloor() {
+    public void secondFloor()
+    {
         lastY = startY;
         startY = secondFloorY;
     }
 
-    public void Morreu() {
+    private void Death()
+    {
         playerIsAlive = false;
+    }
+
+    private void OnEnable()
+    {
+        EventSystem.Player_Death.Add(Death);
+    }
+
+    private void OnDisable()
+    {
+        EventSystem.Player_Death.Remove(Death);
     }
 
 }

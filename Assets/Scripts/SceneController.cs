@@ -4,22 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour {
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 
     public static void Jogar() {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(Scenes.GamePlay.ToString());
     }
 
     public static void Menu() {
-        SceneManager.LoadScene("MenuPrincipal");
+        SceneManager.LoadScene(Scenes.MainMenu.ToString());
     }
 
     public static void Sair() {

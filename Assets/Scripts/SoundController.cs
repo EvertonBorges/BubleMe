@@ -2,47 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundController : MonoBehaviour {
+[RequireComponent(typeof(AudioSource))]
+public class SoundController : MonoBehaviour
+{
 
-    [SerializeField]
-    private AudioSource som1;
-    [SerializeField]
-    private AudioSource som2;
-    [SerializeField]
-    private AudioSource somLivrosCaindo;
+    private AudioSource _audioSource = null;
 
-    // Start is called before the first frame update
-    void Awake() {
-        som1.Play();
-        som1.loop = false;
-        
+    [SerializeField] private AudioClip _soundMenu = null;
+    [SerializeField] private AudioClip _soundGameplay = null;
+
+    void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
     }
 
-    void Start() {
-
+    public void PlayMenuMusic()
+    {
+       Play(_soundMenu);
     }
 
-    // Update is called once per frame
-    void Update() {
-        //Debug.Log("Song Time: " + som1.time);
-
-        if (!som1.isPlaying) {
-            if (!som2.isPlaying) {
-                Debug.Log("Trocou o Som");
-                som2.Play();
-                som2.loop = true;
-            }
-        }
+    public void PlayGameplayMusic()
+    {
+       Play(_soundGameplay);
     }
 
-    public void Morreu() {
-        if (som1.isPlaying) {
-            som1.Stop();
-        }
-        if (som2.isPlaying) {
-            som2.Stop();
-        }
+    private void Play(AudioClip clip)
+    {
+        _audioSource.Stop();
+        _audioSource.clip = clip;
+        _audioSource.Play();
     }
-
 
 }

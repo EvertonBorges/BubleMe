@@ -17,18 +17,9 @@ public class ButtonEnum : MonoBehaviour {
 
     private Animator animator;
 
-    void Awake() {
+    void Awake()
+    {
         animator = GetComponent<Animator>();
-    }
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 
     public void Acao(){
@@ -53,8 +44,7 @@ public class ButtonEnum : MonoBehaviour {
     }
 
     private void Pausar() {
-        PlayerController playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        playerController.death();
+        EventSystem.Player_Death.Notify();
     }
 
     private void Voltar() {
